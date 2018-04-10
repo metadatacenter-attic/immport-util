@@ -1,0 +1,109 @@
+{
+  "templateType":"compound",
+  "fileName":"basic_study_design.json",
+  "name":"basic_study_design",
+  "schemaVersion":"{{ bioproject.templateSchemaVersion }}",
+  "validationLevel":"",
+  "study":
+  {
+    "userDefinedId":"{{ bioproject.study_id }}"
+    ,"briefTitle":"{{ bioproject.study_title }}"
+    ,"officialTitle":"{{ bioproject.study_title }}"
+    ,"type":"Observational"
+    ,"briefDescription":"{{ bioproject.study_description }}"
+    ,"hypothesis":"{{ bioproject.study_description }}"
+    ,"objectives":"{{ bioproject.study_description }}"
+    ,"endpoints":"{{ bioproject.study_description }}"
+    ,"sponsoringOrganization":"NIAID"
+    ,"targetEnrollment":"{{ bioproject.targetEnrollment }}"
+    ,"conditionStudied":"{{ bioproject.study_description }}"
+    ,"minimumAge":"NA"
+    ,"maximumAge":"NA"
+    ,"ageUnit":"{{ bioproject.ageUnit }}"
+    ,"interventionAgent":"{{ bioproject.interventionAgent }}"
+    ,"actualStartDate":"{{ bioproject.systemDate }}"
+  }
+  ,  "armOrCohort":
+  [
+    {% for index in bioproject.armOrCohort -%}
+  {
+    "description":"{{ index }}"
+    ,"name":"{{ index }}"
+    ,"type":""
+    ,"userDefinedId":"{{ index }}"
+  }{% if loop.last -%}{% else -%},{% endif -%}
+    {% endfor -%}
+  ]
+  ,  "inclusionExclusion":
+  [
+    {% for key, value in bioproject.inclusionExclusion.items() -%}
+  {
+    "criterion":"{{ key }}"
+    ,"criterionCategory":"{{ value }}"
+    ,"userDefinedId":"{{ key }}"
+  }{% if loop.last -%}{% else -%},{% endif -%}
+    {% endfor -%}
+  ]
+  ,  "studyPersonnel":
+  [
+  {
+    "email":"{{ bioproject.collected_by }}"
+    ,"firstName":"{{ bioproject.firstName }}"
+    ,"honorific":"{{ bioproject.honorific }}"
+    ,"lastName":"{{ bioproject.lastName }}"
+    ,"organization":"{{ bioproject.lab_address }}"
+    ,"roleInStudy":"Principal Investigator"
+    ,"siteName":"{{ bioproject.lab_name }}"
+    ,"suffixes":""
+    ,"titleInStudy":"Principal Investigator"
+    ,"userDefinedId":"{{ bioproject.submitted_by }}"
+  }
+  ]
+  ,  "plannedVisit":
+  [
+  {
+    "minStartDay":"1"
+    ,"name":"{{ bioproject.study_id }}"
+    ,"orderNumber":"1"
+    ,"userDefinedId":"{{ bioproject.study_id }}"
+  }
+  ]
+  ,  "study2Protocol":
+  [
+   {% for key, protocolId in bioproject.protocolIds.items() -%}
+  {
+    "protocolId":"{{ key }}"
+  }{% if loop.last -%}{% else -%},{% endif -%}
+    {% endfor -%}
+  ]
+   {% if (bioproject.studyFile != None) -%}
+  ,  "studyFile":
+  [
+    {% for key, value in bioproject.studyFile.items() -%}
+  {
+    "description":"{{ value }}"
+    ,"fileName":"{{ key }}"
+    ,"studyFileType":"Study data"
+  }{% if loop.last -%}{% else -%},{% endif -%}
+    {% endfor -%}
+  ]
+  {% endif -%}
+  {% if (bioproject.pubMedIds != None) -%}
+  ,  "studyPubmed":
+  [
+    {% for index in bioproject.pubMedIds -%}
+  {
+    "authors":""
+    ,"doi":""
+    ,"issue":""
+    ,"journal":""
+    ,"month":""
+    ,"pages":""
+    ,"pubmedId":"{{ index }}"
+    ,"title":""
+    ,"year":""
+  }{% if loop.last -%}{% else -%},{% endif -%}
+    {% endfor -%}
+  ]
+  {% endif -%}
+}

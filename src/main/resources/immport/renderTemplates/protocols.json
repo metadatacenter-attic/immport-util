@@ -1,0 +1,17 @@
+{
+  "templateType":"single",
+  "fileName":"protocols.json",
+  "name":"protocols",
+  "schemaVersion":"{{ bioproject.templateSchemaVersion }}",
+  "validationLevel":"",
+  "data":[
+    {% for key, protocolId in bioproject.protocolIds.items() -%}
+  {
+    "userDefinedId":"{{ key }}"
+    ,"fileName":"{{ protocolId.fileName }}"
+    ,"name":"{{ key }}"
+    ,"type":"Other"
+    ,"description":"{{ protocolId.description }}"
+  }{% if loop.last -%}{% else -%},{% endif -%}
+    {% endfor -%}
+]}

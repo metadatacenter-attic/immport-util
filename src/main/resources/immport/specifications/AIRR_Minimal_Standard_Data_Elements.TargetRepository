@@ -1,0 +1,10 @@
+MiAIRR data set / subset	Target Repository
+1 / study	BioProject
+1 / subject	BioSample
+1 / diag. & intervent.	BioSample
+2 / sample	BioSample
+3 / process (cell)	BioSample
+3 / process (nucl. acid)	SRA
+4 / data (raw reads)	SRA
+5 / process (comput.)	user-defined DOI
+6 / data (proc. seq.)	Genbank
