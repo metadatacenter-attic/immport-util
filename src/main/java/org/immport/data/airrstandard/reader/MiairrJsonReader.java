@@ -35,11 +35,15 @@ public class MiairrJsonReader {
     //
     // Get the template schema version
     //
-    if (PropertiesManager.getDataAirrStandardProperties() == null) {
-      templateSchemaVersion = DEFAULT_SCHEMA_VERSION;
-    } else {
+    templateSchemaVersion = getTemplateSchemaVersion();
+  }
+
+  private static String getTemplateSchemaVersion() {
+    String templateSchemaVersion = DEFAULT_SCHEMA_VERSION;
+    if (hasUserSpecifiedResources()) {
       templateSchemaVersion = PropertiesManager.getDataAirrStandardProperties().getTemplateSchemaVersion();
     }
+    return templateSchemaVersion;
   }
 
   public HashMap<String, Object> getMiairrJson() {
@@ -136,5 +140,9 @@ public class MiairrJsonReader {
     }
     str.append(AirrStandardConstants.CLOSE_PAREN);
     return str.toString();
+  }
+
+  private static boolean hasUserSpecifiedResources() {
+    return PropertiesManager.getDataAirrStandardProperties() != null;
   }
 }

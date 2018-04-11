@@ -130,14 +130,12 @@ public class MiAirrSpecificationReader {
 
   private static InputStream getMiairrDatasetInputStream() throws IOException {
     InputStream stream = null;
-    if (PropertiesManager.getDataAirrStandardProperties() != null) {
+    if (hasUserSpecifiedResources()) {
       String userResource = getUserMiairrDatasetResource();
       log.debug("Loading user-specified MiAIRR dataset resource: " + userResource);
       stream = getInputStreamFromAbsolutePath(userResource);
-    }
-    if (stream == null) {
-      // Load the default AIRR template specification
-      log.debug("User-specified MiAIRR dataset resource could not be detected. Loading the default resource instead.");
+    } else {
+      log.debug("Loading the default MiAIRR dataset resource");
       final ClassLoader cl = Thread.currentThread().getContextClassLoader();
       stream = cl.getResourceAsStream(DEFAULT_MIAIRR_DATASET_RESOURCE);
     }
@@ -146,20 +144,18 @@ public class MiAirrSpecificationReader {
 
   private static String getUserMiairrDatasetResource() {
     String parentDirectory = PropertiesManager.getDataAirrStandardProperties().getTemplatesDirectory();
-    String path = PropertiesManager.getDataAirrStandardProperties().getMiairrTemplatesDataSet();
-    return parentDirectory + "/" + path;
+    String filePath = PropertiesManager.getDataAirrStandardProperties().getMiairrTemplatesDataSet();
+    return String.join(AirrStandardConstants.SLASH, parentDirectory, filePath);
   }
 
   private static InputStream getMiairrTargetRepositoryInputStream() throws IOException {
     InputStream stream = null;
-    if (PropertiesManager.getDataAirrStandardProperties() != null) {
+    if (hasUserSpecifiedResources()) {
       String userResource = getUserMiairrTargetRepositoriesResource();
       log.debug("Loading user-specified MiAIRR target repositories resource: " + userResource);
       stream = getInputStreamFromAbsolutePath(userResource);
-    }
-    if (stream == null) {
-      // Load the default AIRR template specification
-      log.debug("User-specified MiAIRR target repositories resource could not be detected. Loading the default resource instead.");
+    } else {
+      log.debug("Loading the default MiAIRR target repositories resource");
       final ClassLoader cl = Thread.currentThread().getContextClassLoader();
       stream = cl.getResourceAsStream(DEFAULT_MIAIRR_TARGET_REPOSITORY_RESOURCE);
     }
@@ -168,20 +164,18 @@ public class MiAirrSpecificationReader {
 
   private static String getUserMiairrTargetRepositoriesResource() {
     String parentDirectory = PropertiesManager.getDataAirrStandardProperties().getTemplatesDirectory();
-    String path = PropertiesManager.getDataAirrStandardProperties().getMiairrTemplatesTargetRepository();
-    return parentDirectory + "/" + path;
+    String filePath = PropertiesManager.getDataAirrStandardProperties().getMiairrTemplatesTargetRepository();
+    return String.join(AirrStandardConstants.SLASH, parentDirectory, filePath);
   }
 
   private static InputStream getMiairrTemplateInputStream() throws IOException {
     InputStream stream = null;
-    if (PropertiesManager.getDataAirrStandardProperties() != null) {
+    if (hasUserSpecifiedResources()) {
       String userResource = getUserMiairrTemplateResource();
       log.debug("Loading user-specified MiAIRR template resource: " + userResource);
       stream = getInputStreamFromAbsolutePath(userResource);
-    }
-    if (stream == null) {
-      // Load the default AIRR template specification
-      log.debug("User-specified MiAIRR template resource could not be detected. Loading the default resource instead.");
+    } else {
+      log.debug("Loading the default MiAIRR template resource");
       final ClassLoader cl = Thread.currentThread().getContextClassLoader();
       stream = cl.getResourceAsStream(DEFAULT_MIAIRR_TEMPLATE_RESOURCE);
     }
@@ -190,15 +184,15 @@ public class MiAirrSpecificationReader {
 
   private static String getUserMiairrTemplateResource() {
     String parentDirectory = PropertiesManager.getDataAirrStandardProperties().getTemplatesDirectory();
-    String path = PropertiesManager.getDataAirrStandardProperties().getMiairrTemplates();
-    return parentDirectory + "/" + path;
+    String filePath = PropertiesManager.getDataAirrStandardProperties().getMiairrTemplates();
+    return String.join(AirrStandardConstants.SLASH, parentDirectory, filePath);
   }
 
-  private static InputStream getInputStreamFromAbsolutePath(String resource) {
-    try {
-      return new FileInputStream(resource);
-    } catch (IOException e) {
-      return null;
-    }
+  private static boolean hasUserSpecifiedResources() {
+    return PropertiesManager.getDataAirrStandardProperties() != null;
+  }
+
+  private static InputStream getInputStreamFromAbsolutePath(String resource) throws IOException {
+    return new FileInputStream(resource);
   }
 }

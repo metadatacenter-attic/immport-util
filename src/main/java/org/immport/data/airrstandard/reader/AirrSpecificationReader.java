@@ -137,32 +137,30 @@ public class AirrSpecificationReader {
 
   private static InputStream getAirrTemplatesInputStream() throws IOException {
     InputStream stream = null;
-    if (PropertiesManager.getDataAirrStandardProperties() != null) {
+    if (hasUserSpecifiedResources()) {
       String userResource = getUserAirTemplatesResource();
       log.debug("Loading user-specified AIRR template resource: " + userResource);
       stream = getInputStreamFromAbsolutePath(userResource);
-    }
-    if (stream == null) {
-      // Load the default AIRR template specification
-      log.debug("User-specified AIRR template resource could not be detected. Loading the default resource instead.");
+    } else {
+      log.debug("Loading the default AIRR template resource");
       final ClassLoader cl = Thread.currentThread().getContextClassLoader();
       stream = cl.getResourceAsStream(DEFAULT_AIRR_TEMPLATE_RESOURCE);
     }
     return stream;
   }
 
-  private static InputStream getInputStreamFromAbsolutePath(String resource) {
-    try {
-      return new FileInputStream(resource);
-    } catch (IOException e) {
-      return null;
-    }
+  private static boolean hasUserSpecifiedResources() {
+    return PropertiesManager.getDataAirrStandardProperties() != null;
+  }
+
+  private static InputStream getInputStreamFromAbsolutePath(String resource) throws IOException {
+    return new FileInputStream(resource);
   }
 
   private static String getUserAirTemplatesResource() {
     String parentDirectory = PropertiesManager.getDataAirrStandardProperties().getTemplatesDirectory();
     String templateFileName = PropertiesManager.getDataAirrStandardProperties().getAirrTemplates();
-    return parentDirectory + "/" + templateFileName;
+    return String.join(AirrStandardConstants.SLASH, parentDirectory, templateFileName);
   }
 
 }

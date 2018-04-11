@@ -60,19 +60,21 @@ public class RenderTemplate {
 
   private static InputStream getRenderTemplateInputStream(String templateName) throws IOException {
     InputStream stream = null;
-    if (PropertiesManager.getDataAirrStandardProperties() != null) {
+    if (hasUserSpecifiedResources()) {
       String userResource = getUserRenderTemplateResource(templateName);
       log.debug("Loading user-specified rendering template resource: " + userResource);
       stream = getInputStreamFromAbsolutePath(userResource);
-    }
-    if (stream == null) {
-      // Load the default rendering template specification
-      log.debug("User-specified rendering resource could not be detected. Loading the default resource instead.");
+    } else {
+      log.debug("Loading the default rendering template resource");
       final ClassLoader cl = Thread.currentThread().getContextClassLoader();
       String defaultRenderTemplate = getDefaultRenderTemplateResource(templateName);
       stream = cl.getResourceAsStream(defaultRenderTemplate);
     }
     return stream;
+  }
+
+  private static boolean hasUserSpecifiedResources() {
+    return PropertiesManager.getDataAirrStandardProperties() != null;
   }
 
   private static String getUserRenderTemplateResource(String templateName) {
@@ -91,11 +93,7 @@ public class RenderTemplate {
     return String.join(AirrStandardConstants.DOT, templateName, AirrStandardConstants.JSON_SUFFIX);
   }
 
-  private static InputStream getInputStreamFromAbsolutePath(String resource) {
-    try {
-      return new FileInputStream(resource);
-    } catch (IOException e) {
-      return null;
-    }
+  private static InputStream getInputStreamFromAbsolutePath(String resource) throws IOException {
+    return new FileInputStream(resource);
   }
 }
